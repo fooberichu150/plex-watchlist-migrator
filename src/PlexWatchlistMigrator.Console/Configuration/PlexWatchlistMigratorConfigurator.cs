@@ -6,7 +6,7 @@ using PlexWatchlistMigrator.Infrastructure;
 using PlexWatchlistMigrator.Infrastructure.Adapters;
 using PlexWatchlistMigrator.Infrastructure.Repositories;
 
-namespace PlexWatchlistMigrator.Console.Configuration
+namespace PlexWatchlistMigrator.ConsoleApp.Configuration
 {
 	internal static class PlexWatchlistMigratorConfigurator
 	{
@@ -17,8 +17,13 @@ namespace PlexWatchlistMigrator.Console.Configuration
 			services.AddSingleton<Application>();
 			services.AddScoped<ILocalDbContextFactory, LocalDbContextFactory>();
 
+			services.AddScoped<IDataLoadHandlerFactory, DataLoadHandlerFactory>();
 			services.AddScoped<IMigrateViewDataActionHandler, MigrateViewDataActionHandler>();
 			services.AddScoped<IMetadataItemViewAdapter, MetadataItemViewAdapter>();
+
+			// data load handlers...
+			services.AddTransient<IDataLoadHandler, DataLoadHandler>();
+			services.AddTransient<ILoadLibrarySectionsHandler, LoadLibrarySectionsHandler>();
 
 			// repositories
 			services.AddScoped<IRepositoryFactory, RepositoryFactory>();
@@ -27,8 +32,6 @@ namespace PlexWatchlistMigrator.Console.Configuration
 			services.AddScoped<IMetadataItemRepository, MetadataItemRepository>();
 			services.AddScoped<IMetadataItemSettingRepository, MetadataItemSettingRepository>();
 			services.AddScoped<IMetadataItemViewRepository, MetadataItemViewRepository>();
-
-			services.AddScoped<ILoadLibrarySectionsHandler, LoadLibrarySectionsHandler>();
 
 			services
 				.WireupAutoMapper();

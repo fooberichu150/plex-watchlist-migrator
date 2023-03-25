@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using PlexWatchlistMigrator.Infrastructure.ContextSqlite;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PlexWatchlistMigrator.Infrastructure.EntitiesSqlite;
 using DomainModels = PlexWatchlistMigrator.Domain;
 
@@ -12,7 +7,7 @@ namespace PlexWatchlistMigrator.Infrastructure.Repositories
 {
 	public interface IAccountRepository : IRepository<Account>
 	{
-		IEnumerable<DomainModels.Account> GetAll();
+		Task<IEnumerable<DomainModels.Account>> GetAllAsync();
 	}
 
 	public class AccountRepository : RepositoryBase, IAccountRepository
@@ -25,9 +20,12 @@ namespace PlexWatchlistMigrator.Infrastructure.Repositories
 
 		private IMapper Mapper { get; }
 
-		public IEnumerable<DomainModels.Account> GetAll()
+		public async Task<IEnumerable<DomainModels.Account>> GetAllAsync()
 		{
-			return null;
+			var users = await DbContext.Accounts
+				.ToArrayAsync();
+
+			return Mapper.Map<DomainModels.Account[]>(users);
 		}
 	}
 }

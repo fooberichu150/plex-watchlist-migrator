@@ -25,12 +25,4 @@
 		public long? ChangedAt { get; set; }
 		public long? ContentChangedAt { get; set; }
 	}
-
-	public class MetadataItemSimple
-	{
-	}
-
-	public class MetadataItemSetting
-	{
-	}
 }

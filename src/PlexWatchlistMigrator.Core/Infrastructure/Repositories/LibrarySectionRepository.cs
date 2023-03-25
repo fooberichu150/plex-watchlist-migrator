@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PlexWatchlistMigrator.Infrastructure.EntitiesSqlite;
 using DomainModels = PlexWatchlistMigrator.Domain;
 
@@ -11,7 +7,7 @@ namespace PlexWatchlistMigrator.Infrastructure.Repositories
 {
 	public interface ILibrarySectionRepository : IRepository<LibrarySection>
 	{
-		IEnumerable<DomainModels.LibrarySection> GetAll();
+		Task<IEnumerable<DomainModels.LibrarySection>> GetAllAsync();
 	}
 
 	public class LibrarySectionRepository : RepositoryBase, ILibrarySectionRepository
@@ -24,9 +20,13 @@ namespace PlexWatchlistMigrator.Infrastructure.Repositories
 
 		private IMapper Mapper { get; }
 
-		public IEnumerable<DomainModels.LibrarySection> GetAll()
+		public async Task<IEnumerable<DomainModels.LibrarySection>> GetAllAsync()
 		{
-			return null;
+			var librarySections = await DbContext.LibrarySections
+				.Where(lib => DomainModels.Constants.ValidSectionTypes.Contains(lib.SectionType))
+				.ToArrayAsync();
+
+			return Mapper.Map<DomainModels.LibrarySection[]>(librarySections);
 		}
 	}
 }

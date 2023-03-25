@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PlexWatchlistMigrator.Console.Configuration;
+using PlexWatchlistMigrator.ConsoleApp.Configuration;
 using Serilog;
 
 var env = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
@@ -45,6 +45,7 @@ try
 	var application = host.Services.GetRequiredService<Application>();
 	exitCode = await application.RunAsync(args);
 
+	await Task.Delay(250);
 	Console.WriteLine("Press any key to end...");
 	Console.ReadKey();
 }

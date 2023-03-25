@@ -13,7 +13,7 @@ namespace PlexWatchlistMigrator.Infrastructure.Repositories
 
 	public abstract class RepositoryBase : IRepository
 	{
-		protected PlexMigratorContext? DbContext { get; set; }
+		protected PlexMigratorContext? DbContext { get; set; } = default!;
 
 		public virtual void InitializeDbContext(PlexMigratorContext context)
 		{

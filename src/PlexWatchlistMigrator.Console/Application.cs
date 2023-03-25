@@ -68,6 +68,6 @@ public class Application
 		//	exitCode = -2;
 		//});
 
-		return await Task.FromResult(exitCode);
+		return exitCode;
     }
 }
