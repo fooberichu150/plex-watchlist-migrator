@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using CommandLine;
+using CommandLine.Text;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PlexWatchlistMigrator.ConsoleApp.Configuration;
@@ -22,6 +24,39 @@ Log.Logger = new LoggerConfiguration()
 var exitCode = 0;
 try
 {
+	var argOverrideSettings = new Dictionary<string, string?>();
+	var parser = new Parser(with =>
+	{
+		with.CaseInsensitiveEnumValues = true;
+		with.HelpWriter = Console.Error;
+	});
+
+	var parsed = parser.ParseArguments<PlexWatchlistMigrator.ConsoleApp.Models.Arguments>(args);
+	parsed.WithParsed(args =>
+	{
+		if (!string.IsNullOrWhiteSpace(args.InputFile) && !File.Exists(args.InputFile))
+		{
+			throw new ArgumentException(nameof(args.InputFile), "Input file does not exist");
+		}
+
+		if (!string.IsNullOrWhiteSpace(args.OutputFile) && !File.Exists(args.OutputFile))
+		{
+			throw new ArgumentException(nameof(args.OutputFile), "Destination file does not exist");
+		}
+
+		if (!string.IsNullOrWhiteSpace(args.InputFile))
+			argOverrideSettings["ConnectionStrings:Source"] = $"Data Source={args.InputFile}";
+		if (!string.IsNullOrWhiteSpace(args.OutputFile))
+			argOverrideSettings["ConnectionStrings:Destination"] = $"Data Source={args.OutputFile}";
+	});
+	parsed.WithNotParsed(errs =>
+	{
+		var helpText = HelpText.AutoBuild(parsed, h => HelpText.DefaultParsingErrorsHandler(parsed, h), e => e);
+		Console.Error.Write(helpText);
+
+		exitCode = -2;
+	});
+
 	Log.Information("Starting console host");
 	IHost host = Host.CreateDefaultBuilder(args)
 		.UseConsoleLifetime()
@@ -29,6 +64,7 @@ try
 		{
 			app.AddJsonFile($"appsettings.{Environment.MachineName}.json", optional: true, reloadOnChange: true);
 			app.AddJsonFile($"appsettings.local.json", optional: true, reloadOnChange: true);
+			app.AddInMemoryCollection(argOverrideSettings);
 		})
 		.UseSerilog((context, services, configuration) =>
 		{
@@ -42,8 +78,11 @@ try
 		})
 		.Build();
 
-	var application = host.Services.GetRequiredService<Application>();
-	exitCode = await application.RunAsync(args);
+	if (exitCode == 0)
+	{
+		var application = host.Services.GetRequiredService<Application>();
+		exitCode = await application.RunAsync(args);
+	}
 
 	await Task.Delay(250);
 	Console.WriteLine("Press any key to end...");
