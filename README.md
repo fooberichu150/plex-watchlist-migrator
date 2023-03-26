@@ -1,12 +1,10 @@
 # Introduction
 
-Plex Watchlist Migratorr is an application meant for to quickly migrate watch data from one Plex instance to another.
+Plex Watchlist Migrator is an application meant for to quickly migrate watch data from one Plex instance to another.
 
 ## Getting Started
 
 Requires Plex version `1.31.2.6810` or greater (currently tested against `1.31.2.6810`).
-
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
 
 Windows Location:
 `%LocalAppData%\Plex Media Server\Plug-in Support\Databases\com.plexapp.plugins.library.db`
@@ -19,11 +17,25 @@ Asustor NAS Location:
 
 See Also: [Stack Overflow](https://askubuntu.com/a/469056)
 
+### Running Migrator
+
+You can run the application by setting the inputfile path and outputfile paths. Input file will point to the source DB you wish to copy/migrate from. Output file points to the destination DB you wish to copy/migrate to.
+
+```shell
+.\PlexWatchlistMigrator.Console.exe -i "inputfilepath" -o "outputfilepath"
+```
+
+Example:
+
+```shell
+.\PlexWatchlistMigrator.Console.exe -i "J:\Temp\Plex_Stuffs\source\com.plexapp.plugins.library.db" -o "J:\Temp\Plex_Stuffs\destination\com.plexapp.plugins.library.db"
+```
+
 ### Plex Migration Suggestions
 
-Plex themselves [provide a solution](https://support.plex.tv/articles/201154527-move-viewstate-ratings-from-one-install-to-another/).
+Plex themselves [provide a solution](https://support.plex.tv/articles/201154527-move-viewstate-ratings-from-one-install-to-another/). This doesn't work with "on-deck" settings or view history, hence this app.
 
-### Tables
+#### Affected Tables
 
 - accounts
 - library_sections
@@ -31,16 +43,10 @@ Plex themselves [provide a solution](https://support.plex.tv/articles/201154527-
 - metadata_item_views
 - metadata_items
 
----
-
-1. Installation process
-2. Software dependencies
-3. Latest releases
-4. API references
-
 ### Useful Tools
 
 - Visual Studio 2022
+- [DB Browser for SQLite](https://sqlitebrowser.org/)
 
 ### Startup Script
 
@@ -52,4 +58,4 @@ Plex themselves [provide a solution](https://support.plex.tv/articles/201154527-
 
 ## Build and Test
 
-TODO: Describe and show how to build your code and run the tests.
+[TODO]
