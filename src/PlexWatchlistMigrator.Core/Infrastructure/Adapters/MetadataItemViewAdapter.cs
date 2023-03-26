@@ -9,6 +9,7 @@ namespace PlexWatchlistMigrator.Infrastructure.Adapters
 		MetadataItemView ToEntity(MediaItemUserView model);
 	}
 
+	// TODO: Jon - not used; chose to go with AutoMapper instead
 	public class MetadataItemViewAdapter : IMetadataItemViewAdapter
 	{
 		public MediaItemUserView ToDomain(MetadataItemView entity)
@@ -25,9 +26,9 @@ namespace PlexWatchlistMigrator.Infrastructure.Adapters
 				Index = entity.Index,
 				Title = entity.Title,
 				ThumbUrl = entity.ThumbUrl,
-				ViewedAt = entity.ViewedAt,
+				ViewedAt = entity.ViewedAt.HasValue ? new DateTime(entity.ViewedAt.Value) : new DateTime?(),
 				GrandParentGuid = entity.GrandparentGuid,
-				OriginallyAvailableAt = entity.OriginallyAvailableAt
+				OriginallyAvailableAt = entity.OriginallyAvailableAt.HasValue ? new DateTime(entity.OriginallyAvailableAt.Value) : new DateTime?()
 			};
 
 			return model;

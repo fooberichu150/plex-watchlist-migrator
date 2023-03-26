@@ -4,9 +4,24 @@ Plex Watchlist Migratorr is an application meant for to quickly migrate watch da
 
 ## Getting Started
 
+Requires Plex version `1.31.2.6810` or greater (currently tested against `1.31.2.6810`).
+
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
 
+Windows Location:
 `%LocalAppData%\Plex Media Server\Plug-in Support\Databases\com.plexapp.plugins.library.db`
+
+Ubuntu Location:
+`/var/lib/plexmediaserver/...`
+
+Asustor NAS Location:
+`/volume1/Plex/Library/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.db`
+
+See Also: [Stack Overflow](https://askubuntu.com/a/469056)
+
+### Plex Migration Suggestions
+
+Plex themselves [provide a solution](https://support.plex.tv/articles/201154527-move-viewstate-ratings-from-one-install-to-another/).
 
 ### Tables
 

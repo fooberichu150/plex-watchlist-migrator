@@ -28,7 +28,7 @@ namespace PlexWatchlistMigrator.Infrastructure.EntitiesSqlite.Configuration
 				.HasColumnType("integer(8)")
 				.HasColumnName("content_changed_at");
 			builder.Property(e => e.CreatedAt)
-				.HasColumnType("datetime")
+				.HasColumnType("dt_integer(8)")
 				.HasColumnName("created_at");
 			builder.Property(e => e.DisplaySecondaryLevel)
 				.HasColumnType("boolean")
@@ -49,14 +49,14 @@ namespace PlexWatchlistMigrator.Infrastructure.EntitiesSqlite.Configuration
 			builder.Property(e => e.QueryType).HasColumnName("query_type");
 			builder.Property(e => e.QueryXml).HasColumnName("query_xml");
 			builder.Property(e => e.ScannedAt)
-				.HasColumnType("datetime")
+				.HasColumnType("dt_integer(8)")
 				.HasColumnName("scanned_at");
 			builder.Property(e => e.Scanner)
 				.HasColumnType("varchar(255)")
 				.HasColumnName("scanner");
 			builder.Property(e => e.SectionType).HasColumnName("section_type");
 			builder.Property(e => e.UpdatedAt)
-				.HasColumnType("datetime")
+				.HasColumnType("dt_integer(8)")
 				.HasColumnName("updated_at");
 			builder.Property(e => e.UserArtUrl)
 				.HasColumnType("varchar(255)")

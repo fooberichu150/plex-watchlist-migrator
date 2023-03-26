@@ -22,6 +22,7 @@ namespace PlexWatchlistMigrator.Infrastructure.Repositories
 
 		public async Task<IEnumerable<DomainModels.LibrarySection>> GetAllAsync()
 		{
+			// 'select id,name from library_sections where section_type in (1,2)'
 			var librarySections = await DbContext.LibrarySections
 				.Where(lib => DomainModels.Constants.ValidSectionTypes.Contains(lib.SectionType))
 				.ToArrayAsync();

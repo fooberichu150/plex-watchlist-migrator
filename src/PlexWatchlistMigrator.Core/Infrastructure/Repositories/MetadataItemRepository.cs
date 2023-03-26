@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PlexWatchlistMigrator.Infrastructure.EntitiesSqlite;
 using DomainModels = PlexWatchlistMigrator.Domain;
 
@@ -11,7 +7,7 @@ namespace PlexWatchlistMigrator.Infrastructure.Repositories
 {
 	public interface IMetadataItemRepository : IRepository<MetadataItem>
 	{
-		IEnumerable<DomainModels.MetadataItemSimple> GetAllSimple();
+		Task<IEnumerable<DomainModels.MetadataItemSimple>> GetAllSimpleAsync();
 	}
 
 	public class MetadataItemRepository : RepositoryBase, IMetadataItemRepository
@@ -24,9 +20,17 @@ namespace PlexWatchlistMigrator.Infrastructure.Repositories
 
 		private IMapper Mapper { get; }
 
-		public IEnumerable<DomainModels.MetadataItemSimple> GetAllSimple()
+		public async Task<IEnumerable<DomainModels.MetadataItemSimple>> GetAllSimpleAsync()
 		{
-			return null;
+			//'select guid,added_at,metadata_items.created_at from metadata_items '
+			//'inner join library_sections on library_sections.id = metadata_items.library_section_id '
+			//'where library_sections.section_type in (1,2)').fetchall()
+
+			var metaDates = await DbContext.MetadataItems
+				.Where(mi => DomainModels.Constants.ValidSectionTypes.Contains(mi.LibrarySection.SectionType))
+				.ToArrayAsync();
+
+			return Mapper.Map<DomainModels.MetadataItemSimple[]>(metaDates);
 		}
 	}
 }

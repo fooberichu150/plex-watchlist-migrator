@@ -22,6 +22,7 @@ namespace PlexWatchlistMigrator.Infrastructure.Repositories
 
 		public async Task<IEnumerable<DomainModels.Account>> GetAllAsync()
 		{
+			// 'select id,name,hashed_password,salt,created_at from accounts where id != 0 and id < 1000'
 			var users = await DbContext.Accounts
 				.ToArrayAsync();
 

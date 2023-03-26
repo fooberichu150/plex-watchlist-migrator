@@ -12,8 +12,8 @@
 		public long? Index { get; set; }
 		public string? Title { get; set; }
 		public string? ThumbUrl { get; set; }
-		public long? ViewedAt { get; set; }
+		public DateTime? ViewedAt { get; set; }
 		public string? GrandParentGuid { get; set; }
-		public long? OriginallyAvailableAt { get; set; }
+		public DateTime? OriginallyAvailableAt { get; set; }
 	}
 }

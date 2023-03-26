@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Adapters\" />
+    <Folder Include="Domain\Requests\" />
   </ItemGroup>
 
 </Project>

@@ -29,11 +29,11 @@ public partial class LibrarySection
 
     public bool? Public { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+    public long? CreatedAt { get; set; }
 
-    public DateTime? UpdatedAt { get; set; }
+    public long? UpdatedAt { get; set; }
 
-    public DateTime? ScannedAt { get; set; }
+    public long? ScannedAt { get; set; }
 
     public bool? DisplaySecondaryLevel { get; set; }
 

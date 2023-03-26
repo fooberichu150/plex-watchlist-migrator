@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Entities = PlexWatchlistMigrator.Infrastructure.EntitiesSqlite;
 using DomainModels = PlexWatchlistMigrator.Domain;
+using PlexWatchlistMigrator.Infrastructure.MappingProfiles.Converters;
 
 namespace PlexWatchlistMigrator.Infrastructure.MappingProfiles
 {
@@ -8,8 +9,9 @@ namespace PlexWatchlistMigrator.Infrastructure.MappingProfiles
 	{
 		public AccountProfile()
 		{
-			CreateMap<DomainModels.Account, Entities.Account>()
-				.ReverseMap();
+			CreateMap<Entities.Account, DomainModels.Account>()
+				.ReverseMap()
+				.ForMember(dest => dest.MetadataItemViews, opts => opts.Ignore());
 		}
 	}
 
@@ -17,8 +19,13 @@ namespace PlexWatchlistMigrator.Infrastructure.MappingProfiles
 	{
 		public LibrarySectionProfile()
 		{
-			CreateMap<DomainModels.LibrarySection, Entities.LibrarySection>()
-				.ReverseMap();
+			CreateMap<Entities.LibrarySection, DomainModels.LibrarySection>()
+				.ForMember(dest => dest.CreatedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
+				.ForMember(dest => dest.UpdatedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
+				.ForMember(dest => dest.ScannedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
+				.ReverseMap()
+				.ForMember(dest => dest.MetadataItemViews, opts => opts.Ignore())
+				.ForMember(dest => dest.MetadataItems, opts => opts.Ignore());
 		}
 	}
 
@@ -26,8 +33,12 @@ namespace PlexWatchlistMigrator.Infrastructure.MappingProfiles
 	{
 		public MetadataItemProfile()
 		{
-			//CreateMap<DomainModels.MetadataItemSimple, Entities.Account>()
-			//	.ReverseMap();
+			CreateMap<Entities.MetadataItem, DomainModels.MetadataItemSimple>()
+				.ForMember(dest => dest.AddedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
+				.ForMember(dest => dest.CreatedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
+				.ReverseMap()
+				.ForMember(dest => dest.LibrarySection, opts => opts.Ignore())
+				.ForMember(dest => dest.MetadataItemViews, opts => opts.Ignore());
 		}
 	}
 
@@ -35,7 +46,13 @@ namespace PlexWatchlistMigrator.Infrastructure.MappingProfiles
 	{
 		public MetadataItemSettingProfile()
 		{
-			CreateMap<DomainModels.MetadataItemSetting, Entities.MetadataItemSetting>()
+			CreateMap<Entities.MetadataItemSetting, DomainModels.MetadataItemSetting>()
+				.ForMember(dest => dest.ChangedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
+				.ForMember(dest => dest.CreatedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
+				.ForMember(dest => dest.LastRatedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
+				.ForMember(dest => dest.LastSkippedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
+				.ForMember(dest => dest.LastViewedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
+				.ForMember(dest => dest.UpdatedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
 				.ReverseMap();
 		}
 	}
@@ -44,7 +61,9 @@ namespace PlexWatchlistMigrator.Infrastructure.MappingProfiles
 	{
 		public MetadataItemViewProfile()
 		{
-
+			CreateMap<Entities.MetadataItemView, DomainModels.MediaItemUserView>()
+				.ForMember(dest => dest.OriginallyAvailableAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
+				.ForMember(dest => dest.ViewedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>());
 		}
 	}
 }

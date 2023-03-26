@@ -23,7 +23,6 @@ namespace PlexWatchlistMigrator.ConsoleApp.Configuration
 
 			// data load handlers...
 			services.AddTransient<IDataLoadHandler, DataLoadHandler>();
-			services.AddTransient<ILoadLibrarySectionsHandler, LoadLibrarySectionsHandler>();
 
 			// repositories
 			services.AddScoped<IRepositoryFactory, RepositoryFactory>();
