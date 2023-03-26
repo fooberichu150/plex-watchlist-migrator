@@ -22,7 +22,7 @@ namespace PlexWatchlistMigrator.Engines.Comparers
 			if ((x is null && y is not null) || y is null && x is null)
 				return false;
 
-			return string.Compare(x.Name, y.Name, StringComparison.OrdinalIgnoreCase) == 0;
+			return x.Id == y.Id;
 		}
 
 		public int GetHashCode([DisallowNull] Account obj)
@@ -30,7 +30,7 @@ namespace PlexWatchlistMigrator.Engines.Comparers
 			if (obj is null)
 				return -1;
 
-			return obj.Name.GetHashCode();
+			return obj.Id.GetHashCode();
 		}
 	}
 }
