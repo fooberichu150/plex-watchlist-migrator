@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using PlexWatchlistMigrator.Infrastructure.EntitiesSqlite;
 using DomainModels = PlexWatchlistMigrator.Domain;
+using Entities = PlexWatchlistMigrator.Infrastructure.EntitiesSqlite;
 
 namespace PlexWatchlistMigrator.Infrastructure.Repositories
 {
-	public interface IAccountRepository : IRepository<Account>
+	public interface IAccountRepository : IRepository<Entities.Account>
 	{
 		Task<IEnumerable<DomainModels.Account>> GetAllAsync();
+		Task<int> AddAccountsAsync(DomainModels.Account[] users);
 	}
 
 	public class AccountRepository : RepositoryBase, IAccountRepository
@@ -22,11 +23,20 @@ namespace PlexWatchlistMigrator.Infrastructure.Repositories
 
 		public async Task<IEnumerable<DomainModels.Account>> GetAllAsync()
 		{
-			// 'select id,name,hashed_password,salt,created_at from accounts where id != 0 and id < 1000'
 			var users = await DbContext.Accounts
+				.Where(user => user.Id > 0)
 				.ToArrayAsync();
 
 			return Mapper.Map<DomainModels.Account[]>(users);
+		}
+
+		public async Task<int> AddAccountsAsync(params DomainModels.Account[] users)
+		{
+			var newAccounts = Mapper.Map<Entities.Account[]>(users);
+			await DbContext.Accounts.AddRangeAsync(newAccounts);
+
+			var updatedRows = await DbContext.SaveChangesAsync();
+			return updatedRows;
 		}
 	}
 }

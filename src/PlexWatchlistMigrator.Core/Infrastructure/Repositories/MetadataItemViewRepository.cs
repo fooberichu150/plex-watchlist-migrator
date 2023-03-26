@@ -2,12 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using PlexWatchlistMigrator.Infrastructure.EntitiesSqlite;
 using DomainModels = PlexWatchlistMigrator.Domain;
+using Entities = PlexWatchlistMigrator.Infrastructure.EntitiesSqlite;
 
 namespace PlexWatchlistMigrator.Infrastructure.Repositories
 {
 	public interface IMetadataItemViewRepository : IRepository<MetadataItemView>
 	{
 		Task<IEnumerable<DomainModels.MediaItemUserView>> GetUserViewsAsync();
+		Task<int> AddUserViewsAsync(DomainModels.MediaItemUserView[] userViews);
 	}
 
 	public class MetadataItemViewRepository : RepositoryBase, IMetadataItemViewRepository
@@ -35,6 +37,15 @@ namespace PlexWatchlistMigrator.Infrastructure.Repositories
 				.ToArrayAsync();
 
 			return Mapper.Map<DomainModels.MediaItemUserView[]>(views);
+		}
+
+		public async Task<int> AddUserViewsAsync(DomainModels.MediaItemUserView[] userViews)
+		{
+			var newViews = Mapper.Map<Entities.MetadataItemView[]>(userViews);
+			await DbContext.MetadataItemViews.AddRangeAsync(newViews);
+
+			var updatedRows = await DbContext.SaveChangesAsync();
+			return updatedRows;
 		}
 	}
 }

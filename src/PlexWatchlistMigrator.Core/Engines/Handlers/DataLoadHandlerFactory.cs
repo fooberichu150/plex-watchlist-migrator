@@ -6,6 +6,7 @@ namespace PlexWatchlistMigrator.Engines.Handlers
 	public interface IDataLoadHandlerFactory
 	{
 		IDataLoadHandler GetHandler(DbContextType dbContextType);
+		IUpdateDataHandler GetUpdateHandler();
 	}
 
 	public class DataLoadHandlerFactory : IDataLoadHandlerFactory
@@ -23,6 +24,14 @@ namespace PlexWatchlistMigrator.Engines.Handlers
 			var handler = ServiceProvider
 				.GetRequiredService<IDataLoadHandler>()
 				.Initialize(dbContextType);
+
+			return handler;
+		}
+
+		public IUpdateDataHandler GetUpdateHandler()
+		{
+			var handler = ServiceProvider
+				.GetRequiredService<IUpdateDataHandler>();
 
 			return handler;
 		}

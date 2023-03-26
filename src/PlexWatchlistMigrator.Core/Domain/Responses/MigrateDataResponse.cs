@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PlexWatchlistMigrator.Domain.Responses
+﻿namespace PlexWatchlistMigrator.Domain.Responses
 {
 	public class MigrateDataResponse
 	{
+		public int AddedAccounts { get; set; }
+		public int AddedSettings { get; set; }
+		public int AddedViews { get; set; }
 	}
 }

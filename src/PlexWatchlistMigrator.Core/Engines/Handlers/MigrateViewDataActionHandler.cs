@@ -42,9 +42,9 @@ namespace PlexWatchlistMigrator.Engines.Handlers
 			Logger.LogInformation("Destination Metadata Item Settings count: {settings}", destinationData.MetadataItemSettings.Length);
 			Logger.LogInformation("Destination User Views count: {views}", destinationData.UserViewData.Length);
 
-			// TODO: Jon - now that I have all the data loaded, find deltas and update destination
+			var destinationUpdater = DataLoadHandlerFactory.GetUpdateHandler();
+			var response = await destinationUpdater.UpdateDataAsync(sourceData, destinationData);
 
-			var response = new MigrateDataResponse();
 			return response;
 		}
 	}

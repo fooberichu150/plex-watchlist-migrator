@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using PlexWatchlistMigrator.Infrastructure.EntitiesSqlite;
 using DomainModels = PlexWatchlistMigrator.Domain;
+using Entities = PlexWatchlistMigrator.Infrastructure.EntitiesSqlite;
 
 namespace PlexWatchlistMigrator.Infrastructure.Repositories
 {
-	public interface IMetadataItemSettingRepository : IRepository<MetadataItemSetting>
+	public interface IMetadataItemSettingRepository : IRepository<Entities.MetadataItemSetting>
 	{
 		Task<IEnumerable<DomainModels.MetadataItemSetting>> GetAllAsync();
+		Task<int> AddMetadataItemSettingsAsync(DomainModels.MetadataItemSetting[] settings);
 	}
 
 	public class MetadataItemSettingRepository : RepositoryBase, IMetadataItemSettingRepository
@@ -31,6 +32,15 @@ namespace PlexWatchlistMigrator.Infrastructure.Repositories
 				.ToArrayAsync();
 
 			return Mapper.Map<DomainModels.MetadataItemSetting[]>(settings);
+		}
+
+		public async Task<int> AddMetadataItemSettingsAsync(DomainModels.MetadataItemSetting[] settings)
+		{
+			var newSettings = Mapper.Map<Entities.MetadataItemSetting[]>(settings);
+			await DbContext.MetadataItemSettings.AddRangeAsync(newSettings);
+
+			var updatedRows = await DbContext.SaveChangesAsync();
+			return updatedRows;
 		}
 	}
 }

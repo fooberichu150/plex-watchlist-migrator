@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PlexWatchlistMigrator.Engines.Handlers;
 using PlexWatchlistMigrator.Infrastructure;
-using PlexWatchlistMigrator.Infrastructure.Adapters;
 using PlexWatchlistMigrator.Infrastructure.Repositories;
 
 namespace PlexWatchlistMigrator.ConsoleApp.Configuration
@@ -19,10 +17,10 @@ namespace PlexWatchlistMigrator.ConsoleApp.Configuration
 
 			services.AddScoped<IDataLoadHandlerFactory, DataLoadHandlerFactory>();
 			services.AddScoped<IMigrateViewDataActionHandler, MigrateViewDataActionHandler>();
-			services.AddScoped<IMetadataItemViewAdapter, MetadataItemViewAdapter>();
 
 			// data load handlers...
 			services.AddTransient<IDataLoadHandler, DataLoadHandler>();
+			services.AddTransient<IUpdateDataHandler, UpdateDataHandler>();
 
 			// repositories
 			services.AddScoped<IRepositoryFactory, RepositoryFactory>();

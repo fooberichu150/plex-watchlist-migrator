@@ -53,7 +53,15 @@ namespace PlexWatchlistMigrator.Infrastructure.MappingProfiles
 				.ForMember(dest => dest.LastSkippedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
 				.ForMember(dest => dest.LastViewedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
 				.ForMember(dest => dest.UpdatedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
-				.ReverseMap();
+				.ReverseMap()
+				.ForMember(dest => dest.Id, opts => opts.Ignore())
+				.ForMember(dest => dest.ChangedAt, opts => opts.ConvertUsing<DateTimeToLongConverter, DateTime?>())
+				.ForMember(dest => dest.CreatedAt, opts => opts.ConvertUsing<DateTimeToLongConverter, DateTime?>())
+				.ForMember(dest => dest.LastRatedAt, opts => opts.ConvertUsing<DateTimeToLongConverter, DateTime?>())
+				.ForMember(dest => dest.LastSkippedAt, opts => opts.ConvertUsing<DateTimeToLongConverter, DateTime?>())
+				.ForMember(dest => dest.LastViewedAt, opts => opts.ConvertUsing<DateTimeToLongConverter, DateTime?>())
+				.ForMember(dest => dest.UpdatedAt, opts => opts.ConvertUsing<DateTimeToLongConverter, DateTime?>())
+				;
 		}
 	}
 
@@ -63,7 +71,16 @@ namespace PlexWatchlistMigrator.Infrastructure.MappingProfiles
 		{
 			CreateMap<Entities.MetadataItemView, DomainModels.MediaItemUserView>()
 				.ForMember(dest => dest.OriginallyAvailableAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
-				.ForMember(dest => dest.ViewedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>());
+				.ForMember(dest => dest.ViewedAt, opts => opts.ConvertUsing<LongToDateTimeConverter, long?>())
+				.ReverseMap()
+				.ForMember(dest => dest.Account, opts => opts.Ignore())
+				.ForMember(dest => dest.DeviceId, opts => opts.Ignore())
+				.ForMember(dest => dest.Id, opts => opts.Ignore())
+				.ForMember(dest => dest.LibrarySection, opts => opts.Ignore())
+				.ForMember(dest => dest.MetadataItem, opts => opts.Ignore())
+				.ForMember(dest => dest.OriginallyAvailableAt, opts => opts.ConvertUsing<DateTimeToLongConverter, DateTime?>())
+				.ForMember(dest => dest.ViewedAt, opts => opts.ConvertUsing<DateTimeToLongConverter, DateTime?>())
+				;
 		}
 	}
 }
